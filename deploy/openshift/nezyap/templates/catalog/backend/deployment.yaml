@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nezyap.fullname" . }}-catalog-backend-deploy
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: catalog-backend-deploy
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "nezyap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/element: catalog-backend
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "nezyap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/element: catalog-backend
+    spec:
+      serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ include "nezyap.fullname" . }}-catalog-backend
+        image: nezyap/catalog-backend:latest
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.catalog.backend.port }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.catalog.backend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.catalog.backend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5

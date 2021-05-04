@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-frontend-cm
+data:
+  PORT: '{{ .Values.catalog.frontend.port }}'
+  CATALOG_BACKEND_URL: 'http://localhost:{{ .Values.catalog.backend.port }}'
+  PAYMENT_FRONTEND_BASE_URL: 'http://localhost:{{ .Values.payment.frontend.port }}'

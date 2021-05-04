@@ -1,0 +1,8 @@
+{
+  "name": "nezyap",
+  "version": "1.0.0",
+  "description": "Showcase",
+  "main": "index.js",
+  "author": "Nicolas Cunin",
+  "license": "MIT"
+}

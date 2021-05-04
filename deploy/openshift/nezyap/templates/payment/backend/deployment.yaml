@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nezyap.fullname" . }}-payment-backend-deploy
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: payment-backend-deploy
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "nezyap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/element: payment-backend
+  template:
+    {{- with .Values.podAnnotations }}
+    annotations:
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
+    metadata:
+      labels:
+        {{- include "nezyap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/element: payment-backend
+    spec:
+      serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: { .Chart.Name }}-payment-backend
+        image: nezyap/payment-backend:latest
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.payment.backend.port }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        env:
+        - name: CATALOG_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: payment-backend-cm
+              key: CATALOG_BACKEND_URL
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: payment-backend-cm
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: payment-backend-cm
+              key: REDIS_PORT
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.payment.backend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.payment.backend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nezyap.fullname" . }}-payment-frontend-svc
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: payment-frontend-svc
+spec:
+  type: NodePort
+  selector:
+    {{- include "nezyap.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/element: payment-frontend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.payment.frontend.port }}
+      targetPort: {{ .Values.payment.frontend.port }}
+      nodePort: {{ .Values.payment.frontend.port }}

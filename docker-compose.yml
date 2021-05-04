@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  catalog_backend:
+    build:
+      context: ./catalog-backend
+    ports:
+      - 3331:3331
+    restart: unless-stopped
+    container_name: catalog-backend
+
+  payment_backend:
+    build:
+      context: ./payment-backend
+    ports:
+      - 3332:3332
+    restart: unless-stopped
+    container_name: payment-backend
+    environment:
+      - CATALOG_BACKEND_URL=http://catalog_backend:3331
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    links:
+      - 'redis'
+      - 'catalog_backend'
+
+  catalog_frontend:
+    build:
+      context: ./catalog-frontend
+    ports:
+      - 2221:2221
+    restart: unless-stopped
+    container_name: catalog-frontend
+    environment:
+      - PORT=2221
+      - CATALOG_BACKEND_URL=http://localhost:3331
+      - PAYMENT_FRONTEND_BASE_URL=http://localhost:3331
+
+  payment_frontend:
+    build:
+      context: ./payment-frontend
+    ports:
+      - 2222:2222
+    restart: unless-stopped
+    container_name: payment-frontend
+    environment:
+      - PORT=2222
+      - PAYMENT_BACKEND_URL=http://localhost:3332
+      - CATALOG_FRONTEND_BASE_URL=http://localhost:2221
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+    container_name: redis
+    volumes:
+      - /tmp/redis/data:/data

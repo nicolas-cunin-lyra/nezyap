@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nezyap.fullname" . }}-payment-frontend-deploy
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: payment-frontend-deploy
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "nezyap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/element: payment-frontend
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "nezyap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/element: payment-frontend
+    spec:
+      serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ include "nezyap.fullname" . }}-payment-frontend
+        image: nezyap/payment-frontend:latest
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.payment.frontend.port }}
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: payment-frontend-cm
+              key: PORT
+        - name: PAYMENT_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: payment-frontend-cm
+              key: PAYMENT_BACKEND_URL
+        - name: CATALOG_FRONTEND_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: payment-frontend-cm
+              key: CATALOG_FRONTEND_BASE_URL
+        livenessProbe:
+          httpGet:
+            path: /transactions
+            port: {{ .Values.payment.frontend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /transactions
+            port: {{ .Values.payment.frontend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
