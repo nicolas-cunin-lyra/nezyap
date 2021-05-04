@@ -6,7 +6,7 @@ metadata:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: payment-backend-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     {{- include "nezyap.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/element: payment-backend
@@ -14,4 +14,3 @@ spec:
     - protocol: TCP
       port: {{ .Values.payment.backend.port }}
       targetPort: {{ .Values.payment.backend.port }}
-      nodePort: {{ .Values.payment.backend.port }}

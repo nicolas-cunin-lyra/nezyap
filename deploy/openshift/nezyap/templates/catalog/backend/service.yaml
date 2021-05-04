@@ -6,7 +6,7 @@ metadata:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: catalog-backend-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     {{- include "nezyap.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/element: catalog-backend
@@ -14,4 +14,3 @@ spec:
     - protocol: TCP
       port: {{ .Values.catalog.backend.port }}
       targetPort: {{ .Values.catalog.backend.port }}
-      nodePort: {{ .Values.catalog.backend.port }}

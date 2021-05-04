@@ -4,5 +4,5 @@ metadata:
   name: payment-frontend-cm
 data:
   PORT: '{{ .Values.payment.frontend.port }}'
-  PAYMENT_BACKEND_URL: 'http://localhost:{{ .Values.payment.backend.port }}'
-  CATALOG_FRONTEND_BASE_URL: 'http://localhost:{{ .Values.catalog.frontend.port }}'
+  PAYMENT_BACKEND_URL: 'http://localhost:{{ .Values.payment.backend.port }}/payment/backend'
+  CATALOG_FRONTEND_BASE_URL: 'http://localhost:{{ .Values.catalog.frontend.port }}/catalog/frontend'
