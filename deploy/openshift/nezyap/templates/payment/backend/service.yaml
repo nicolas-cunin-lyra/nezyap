@@ -11,6 +11,7 @@ spec:
     {{- include "nezyap.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/element: payment-backend
   ports:
-    - protocol: TCP
-      port: {{ .Values.payment.backend.port }}
+    - name: http
+      protocol: TCP
+      port: 80
       targetPort: {{ .Values.payment.backend.port }}

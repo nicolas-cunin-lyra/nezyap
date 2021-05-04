@@ -7,7 +7,8 @@ metadata:
     app.kubernetes.io/element: payment-backend-ingress
 spec:
   rules:
-  - http:
+  - host: "{{ .Values.payment.backend.ingress.host }}"
+    http:
       paths:
       - path: /payment/backend
         pathType: Prefix
@@ -15,4 +16,4 @@ spec:
           service:
             name: {{ include "nezyap.fullname" . }}-payment-backend-svc
             port:
-              number: {{ .Value.payment.backend.port }}
+              name: http

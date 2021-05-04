@@ -7,7 +7,8 @@ metadata:
     app.kubernetes.io/element: catalog-backend-ingress
 spec:
   rules:
-  - http:
+  - host: "{{ .Values.catalog.backend.ingress.host }}"
+    http:
       paths:
       - path: /catalog/backend
         pathType: Prefix
@@ -15,4 +16,4 @@ spec:
           service:
             name: {{ include "nezyap.fullname" . }}-catalog-backend-svc
             port:
-              number: {{ .Value.catalog.backend.port }}
+              name: http

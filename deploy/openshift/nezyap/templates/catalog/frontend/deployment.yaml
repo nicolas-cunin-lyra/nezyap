@@ -14,19 +14,20 @@ spec:
       {{- include "nezyap.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/element: catalog-frontend
   template:
-    {{- with .Values.podAnnotations }}
-    annotations:
-    {{- toYaml . | nindent 8 }}
-    {{- end }}
-    labels:
-      {{- include "nezyap.selectorLabels" . | nindent 8 }}
-      app.kubernetes.io/element: catalog-frontend
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "nezyap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/element: catalog-frontend
     spec:
       serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-      - name: { .Chart.Name }}-catalog-frontend
+      - name: {{ .Chart.Name }}-catalog-frontend
         image: nezyap/catalog-frontend:latest
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:

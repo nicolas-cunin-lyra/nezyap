@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: payment-frontend-cm
 data:
-  PORT: '{{ .Values.payment.frontend.port }}'
-  PAYMENT_BACKEND_URL: 'http://localhost:{{ .Values.payment.backend.port }}/payment/backend'
-  CATALOG_FRONTEND_BASE_URL: 'http://localhost:{{ .Values.catalog.frontend.port }}/catalog/frontend'
+  PORT: {{ .Values.payment.frontend.port }}
+  PAYMENT_BACKEND_URL: "http://{{ .Values.payment.backend.ingress.host }}"
+  CATALOG_FRONTEND_BASE_URL: "http://{{ .Values.catalog.frontend.ingress.host }}"

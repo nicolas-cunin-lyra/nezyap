@@ -52,17 +52,28 @@ resources:
     cpu: "0.15"
     memory: 128Mi
 
+image:
+  pullPolicy: Always
+
 catalog:
   backend:
     port: 3331
+    ingress:
+      host: 
   frontend:
     port: 2221
+    ingress:
+      host: 
 
 payment:
   backend:
     port: 3332
+    ingress:
+      host: 
   frontend:
     port: 2222
+    ingress:
+      host: 
 
 redis:
   port: 6379

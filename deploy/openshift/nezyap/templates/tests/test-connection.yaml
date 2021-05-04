@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "nezyap.fullname" . }}:{{ .Values.service.port }}']
+      args: ["{{ include "nezyap.fullname" . }}-payment-backend-svc"]
   restartPolicy: Never

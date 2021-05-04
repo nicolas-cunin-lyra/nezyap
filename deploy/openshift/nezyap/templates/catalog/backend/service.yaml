@@ -11,6 +11,7 @@ spec:
     {{- include "nezyap.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/element: catalog-backend
   ports:
-    - protocol: TCP
-      port: {{ .Values.catalog.backend.port }}
+    - name: http
+      protocol: TCP
+      port: 80
       targetPort: {{ .Values.catalog.backend.port }}

@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: payment-backend-cm
 data:
-  CATALOG_BACKEND_URL: 'https://{{ include "nezyap.fullname" . }}-catalog-backend-svc.{{ .Release.namespace }}.svc.cluster.local:{{ .Values.catalog.backend.port }}'
-  REDIS_HOST: 'redis-svc.{{ .Release.namespace }}.svc.cluster.local'
-  REDIS_PORT: '{{ .Values.redis.port }}'
+  CATALOG_BACKEND_URL: "http://{{ include "nezyap.fullname" . }}-catalog-backend-svc"
+  REDIS_HOST: "{{ include "nezyap.fullname" . }}-redis-svc"
+  REDIS_PORT: {{ .Values.redis.port }}

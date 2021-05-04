@@ -27,7 +27,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-      - name: { .Chart.Name }}-payment-backend
+      - name: {{ .Chart.Name }}-payment-backend
         image: nezyap/payment-backend:latest
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
