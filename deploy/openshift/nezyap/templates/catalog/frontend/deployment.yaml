@@ -64,5 +64,3 @@ spec:
             port: {{ .Values.catalog.frontend.port }}
           initialDelaySeconds: 2
           periodSeconds: 5
-        resources:
-          {{- toYaml .Values.resources | nindent 12 }}

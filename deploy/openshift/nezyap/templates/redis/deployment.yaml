@@ -38,9 +38,10 @@ spec:
           value: "true"
         ports:
         - containerPort: {{ .Values.redis.port }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
         resources:
-          limits:
-            cpu: "0.1"
+          {{- toYaml .Values.redis.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /redis-master-data
           name: data

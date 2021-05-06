@@ -15,13 +15,6 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-autoscaling:
-  enabled: false
-  minReplicas: 3
-  maxReplicas: 6
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
-
 nodeSelector: {}
 
 serviceAccount:
@@ -79,13 +72,23 @@ redis:
   port: 6379
   autoscaling:
     enabled: false
-    minReplicas: 6
-    maxReplicas: 12
+    minReplicas: 3
+    maxReplicas: 6
     targetMemoryUtilizationPercentage: 60
   resources:
     requests:
-      memory: "8Mi"
-      cpu: "150m"
+      cpu: "50m"
+      memory: 64Mi
     limits:
-      memory: "16Mi"
-      cpu: "200m"
+      cpu: "100m"
+      memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+monitoring:
+  enabled: true

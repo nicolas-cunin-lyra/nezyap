@@ -68,5 +68,3 @@ spec:
             port: {{ .Values.payment.backend.port }}
           initialDelaySeconds: 2
           periodSeconds: 5
-        resources:
-          {{- toYaml .Values.resources | nindent 12 }}
