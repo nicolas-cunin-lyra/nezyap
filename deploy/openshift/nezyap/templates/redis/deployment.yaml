@@ -6,7 +6,7 @@ metadata:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: redis-deploy
 spec:
-  {{- if not .Values.redis.autoscaling.enabled }}
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:

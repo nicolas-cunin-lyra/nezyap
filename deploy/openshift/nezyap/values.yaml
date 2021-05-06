@@ -71,7 +71,6 @@ payment:
 redis:
   port: 6379
   autoscaling:
-    enabled: false
     minReplicas: 3
     maxReplicas: 6
     targetMemoryUtilizationPercentage: 60
