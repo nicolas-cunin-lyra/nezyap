@@ -1,0 +1,12 @@
+# Required for project isolated network policies
+# (https://docs.openshift.com/container-platform/4.7/networking/openshift_sdn/about-openshift-sdn.html#nw-openshift-sdn-modes_about-openshift-sdn)
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-openshift-operators-redhat
+spec:
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            project: openshift-operators-redhat
