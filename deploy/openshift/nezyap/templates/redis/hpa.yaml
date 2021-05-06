@@ -1,4 +1,4 @@
-{{- if .Values.autoscaling.enabled }}
+{{- if .Values.redis.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -10,23 +10,13 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "nezyap.fullname" . }}-redis-deploy
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.redis.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.redis.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
-          type: Utilization
-    {{- end }}
-    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
         target:
-          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
           type: Utilization
-    {{- end }}
+          averageUtilization: {{ .Values.redis.autoscaling.targetMemoryUtilizationPercentage }}
 {{- end }}

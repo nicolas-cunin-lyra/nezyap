@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "nezyap.fullname" . }}-prometheus
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: prometheus
+spec:
+  endpoints:
+  - interval: 5s
+    port: http
+    scheme: http
+    path: /metrics
+  selector:
+    matchLabels:
+      {{- include "nezyap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/element: payment-backend-svc

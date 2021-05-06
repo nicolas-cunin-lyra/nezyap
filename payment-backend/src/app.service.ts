@@ -1,4 +1,6 @@
 import { CACHE_MANAGER, HttpService, Inject, Injectable, Logger } from '@nestjs/common'
+import { InjectMetric } from "@willsoto/nestjs-prometheus";
+import { Counter } from "prom-client";
 import { Transaction } from './model/Transaction'
 import { User } from './model/User'
 import { Cache } from 'cache-manager'
@@ -10,14 +12,15 @@ import { Config } from './config'
 @Injectable()
 export class AppService {
 
-  private readonly logger = new Logger(AppService.name);
+  private readonly logger = new Logger(AppService.name)
 
   broken = false
 
   constructor(
     @Inject(CACHE_MANAGER) 
-    private cacheManager: Cache,
-    private httpService: HttpService) {}
+    private readonly cacheManager: Cache,
+    private readonly httpService: HttpService,
+    @InjectMetric("nb_transactions") public nbTransactionsCounter: Counter<string>) {}
 
   async getTransactionsForUser(user: string): Promise<Array<Transaction>> {
     this.logger.debug('Getting all the Transactions for user ' + user)
@@ -63,6 +66,9 @@ export class AppService {
     this.cacheManager.set(`user:${user}`, userFound, {
       ttl: 3600000
     })
+
+    // custom business metric: nb transaction ++
+    this.nbTransactionsCounter.inc()
 
     return true
   }

@@ -70,7 +70,7 @@ function BuyProduct() {
   useEffect(() => {
     if (product != null) return
     axios
-      .get(`http://localhost:3331/catalog/${productId}`)
+      .get(`${Config.CATALOG_BACKEND_BASE_URL}/catalog/${productId}`)
       .then((res: {data: Product}) => setProduct(res.data))
   })
 

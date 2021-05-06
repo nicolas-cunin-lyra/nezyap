@@ -28,27 +28,29 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
       - name: {{ .Chart.Name }}-payment-backend
-        image: nezyap/payment-backend:latest
+        image: {{ .Values.image.registry }}/nezyap/payment-backend:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.payment.backend.port }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
         env:
         - name: CATALOG_BACKEND_URL
           valueFrom:
             configMapKeyRef:
-              name: payment-backend-cm
+              name: {{ include "nezyap.fullname" . }}-payment-backend-cm
               key: CATALOG_BACKEND_URL
         - name: REDIS_HOST
           valueFrom:
             configMapKeyRef:
-              name: payment-backend-cm
+              name: {{ include "nezyap.fullname" . }}-payment-backend-cm
               key: REDIS_HOST
         - name: REDIS_PORT
           valueFrom:
             configMapKeyRef:
-              name: payment-backend-cm
+              name: {{ include "nezyap.fullname" . }}-payment-backend-cm
               key: REDIS_PORT
         livenessProbe:
           httpGet:

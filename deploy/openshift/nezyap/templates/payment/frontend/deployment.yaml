@@ -28,26 +28,33 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
       - name: {{ include "nezyap.fullname" . }}-payment-frontend
-        image: nezyap/payment-frontend:latest
+        image: {{ .Values.image.registry }}/nezyap/payment-frontend:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.payment.frontend.port }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
         env:
         - name: PORT
           valueFrom:
             configMapKeyRef:
-              name: payment-frontend-cm
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
               key: PORT
         - name: PAYMENT_BACKEND_URL
           valueFrom:
             configMapKeyRef:
-              name: payment-frontend-cm
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
               key: PAYMENT_BACKEND_URL
         - name: CATALOG_FRONTEND_BASE_URL
           valueFrom:
             configMapKeyRef:
-              name: payment-frontend-cm
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
               key: CATALOG_FRONTEND_BASE_URL
+        - name: CATALOG_BACKEND_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
+              key: CATALOG_BACKEND_BASE_URL
         livenessProbe:
           httpGet:
             path: /transactions
@@ -60,3 +67,5 @@ spec:
             port: {{ .Values.payment.frontend.port }}
           initialDelaySeconds: 2
           periodSeconds: 5
+          failureThreshold: 30
+        

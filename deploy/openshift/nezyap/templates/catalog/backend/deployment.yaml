@@ -28,10 +28,12 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
       - name: {{ include "nezyap.fullname" . }}-catalog-backend
-        image: nezyap/catalog-backend:latest
+        image: {{ .Values.image.registry }}/nezyap/catalog-backend:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.catalog.backend.port }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
         livenessProbe:
           httpGet:
             path: /health

@@ -3,6 +3,7 @@ services:
   catalog_backend:
     build:
       context: ./catalog-backend
+    image: nezyap/catalog-backend
     ports:
       - 3331:3331
     restart: unless-stopped
@@ -11,6 +12,7 @@ services:
   payment_backend:
     build:
       context: ./payment-backend
+    image: nezyap/payment-backend
     ports:
       - 3332:3332
     restart: unless-stopped
@@ -26,6 +28,7 @@ services:
   catalog_frontend:
     build:
       context: ./catalog-frontend
+    image: nezyap/catalog-frontend
     ports:
       - 2221:2221
     restart: unless-stopped
@@ -38,6 +41,7 @@ services:
   payment_frontend:
     build:
       context: ./payment-frontend
+    image: nezyap/payment-frontend
     ports:
       - 2222:2222
     restart: unless-stopped

@@ -1,0 +1,29 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: openshift-registry
+  namespace: openshift-image-registry
+  labels:
+    docker-registry: default
+spec:
+  host: openshift-registry.apps.poc.pandrieux.sattamax.com
+  to:
+    kind: Service
+    name: image-registry
+    weight: 100
+  port:
+    targetPort: 5000-tcp
+  tls:
+    termination: passthrough
+    insecureEdgeTerminationPolicy: None
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: openshift-registry.apps.poc.pandrieux.sattamax.com
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+          lastTransitionTime: '2021-05-05T10:34:55Z'
+      wildcardPolicy: None
+      routerCanonicalHostname: apps.poc.pandrieux.sattamax.com

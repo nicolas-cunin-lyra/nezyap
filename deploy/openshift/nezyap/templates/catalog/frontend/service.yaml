@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "nezyap.fullname" . }}-catalog-backend-svc
+  name: {{ include "nezyap.fullname" . }}-catalog-frontend-svc
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: catalog-frontend-svc

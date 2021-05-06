@@ -28,27 +28,29 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
       - name: {{ .Chart.Name }}-catalog-frontend
-        image: nezyap/catalog-frontend:latest
+        image: {{ .Values.image.registry }}/nezyap/catalog-frontend:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.catalog.frontend.port }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
         env:
         - name: PORT
           valueFrom:
             configMapKeyRef:
-              name: catalog-frontend-cm
+              name: {{ include "nezyap.fullname" . }}-catalog-frontend-cm
               key: PORT
         - name: CATALOG_BACKEND_URL
           valueFrom:
             configMapKeyRef:
-              name: catalog-frontend-cm
+              name: {{ include "nezyap.fullname" . }}-catalog-frontend-cm
               key: CATALOG_BACKEND_URL
         - name: CATALOG_BACKEND_URL
           valueFrom:
             configMapKeyRef:
-              name: catalog-frontend-cm
+              name: {{ include "nezyap.fullname" . }}-catalog-frontend-cm
               key: PAYMENT_FRONTEND_BASE_URL
         livenessProbe:
           httpGet:

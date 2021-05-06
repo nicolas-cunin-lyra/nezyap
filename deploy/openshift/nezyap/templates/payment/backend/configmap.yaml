@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: payment-backend-cm
+  name: {{ include "nezyap.fullname" . }}-payment-backend-cm
 data:
   CATALOG_BACKEND_URL: "http://{{ include "nezyap.fullname" . }}-catalog-backend-svc"
   REDIS_HOST: "{{ include "nezyap.fullname" . }}-redis-svc"
-  REDIS_PORT: {{ .Values.redis.port }}
+  REDIS_PORT: "{{ .Values.redis.port }}"

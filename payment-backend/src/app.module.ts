@@ -1,7 +1,7 @@
 import * as redisStore from 'cache-manager-redis-store';
 import { CacheModule, HttpModule, Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
-import { PrometheusModule } from "@willsoto/nestjs-prometheus";
+import { PrometheusModule, makeCounterProvider } from "@willsoto/nestjs-prometheus";
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HealthController } from './health/health.controller';
@@ -19,9 +19,23 @@ import { ServiceHealthIndicator } from './health/service.healthindicator';
       maxRedirects: 5,
     }),
     TerminusModule,
-    PrometheusModule.register(),
+    PrometheusModule.register({
+      defaultMetrics: {
+        enabled: true,
+        config: {
+          labels: { app: 'nezyap', component: 'payment-backend' }
+        }
+      }
+    }),
   ],
   controllers: [AppController, HealthController],
-  providers: [AppService, ServiceHealthIndicator],
+  providers: [
+    AppService,
+    ServiceHealthIndicator,
+    makeCounterProvider({
+      name: "nb_transactions",
+      help: "Number of transactions",
+    }),
+  ],
 })
 export class AppModule {}

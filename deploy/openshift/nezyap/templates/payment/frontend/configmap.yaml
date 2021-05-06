@@ -1,8 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: payment-frontend-cm
+  name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
 data:
-  PORT: {{ .Values.payment.frontend.port }}
-  PAYMENT_BACKEND_URL: "http://{{ .Values.payment.backend.ingress.host }}"
-  CATALOG_FRONTEND_BASE_URL: "http://{{ .Values.catalog.frontend.ingress.host }}"
+  PORT: "{{ .Values.payment.frontend.port }}"
+  PAYMENT_BACKEND_URL: "http://{{ .Values.payment.backend.ingress.host }}{{ .Values.payment.backend.ingress.prefix }}"
+  CATALOG_FRONTEND_BASE_URL: "http://{{ .Values.catalog.frontend.ingress.host }}{{ .Values.catalog.frontend.ingress.prefix }}"
+  CATALOG_BACKEND_BASE_URL: "http://{{ .Values.catalog.backend.ingress.host }}{{ .Values.catalog.backend.ingress.prefix }}"

@@ -6,7 +6,7 @@ metadata:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: redis-deploy
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if not .Values.redis.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
@@ -39,8 +39,7 @@ spec:
         ports:
         - containerPort: {{ .Values.redis.port }}
         resources:
-          limits:
-            cpu: "0.1"
+          {{- toYaml .Values.redis.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /redis-master-data
           name: data

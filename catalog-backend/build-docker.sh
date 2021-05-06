@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
-yarn build
-docker build . -t nezyap/catalog-backend
+docker build . -t openshift-registry.apps.poc.pandrieux.sattamax.com/nezyap/catalog-backend:local

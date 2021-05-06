@@ -15,22 +15,10 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
 autoscaling:
   enabled: true
-  minReplicas: 1
-  maxReplicas: 5
+  minReplicas: 3
+  maxReplicas: 6
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
@@ -47,33 +35,57 @@ serviceAccount:
 
 resources:
   limits:
-    memory: 128Mi
+    cpu: "0.8"
+    memory: 256Mi
   requests:
     cpu: "0.15"
     memory: 128Mi
 
 image:
   pullPolicy: Always
+  # for lyra custom images
+  # these default values are for microk8s registry
+  registry: image-registry.openshift-image-registry.svc:5000
+  version: local
+
+ingress:
+  usePrefix: false
 
 catalog:
   backend:
     port: 3331
     ingress:
-      host: 
+      prefix: /
+      host: catalog.backend.apps.poc.pandrieux.sattamax.com
   frontend:
     port: 2221
     ingress:
-      host: 
+      prefix: /
+      host: catalog.frontend.apps.poc.pandrieux.sattamax.com
 
 payment:
   backend:
     port: 3332
     ingress:
-      host: 
+      prefix: /
+      host: payment.backend.apps.poc.pandrieux.sattamax.com
   frontend:
     port: 2222
     ingress:
-      host: 
+      prefix: /
+      host: payment.frontend.apps.poc.pandrieux.sattamax.com
 
 redis:
   port: 6379
+  autoscaling:
+    enabled: true
+    minReplicas: 6
+    maxReplicas: 12
+    targetMemoryUtilizationPercentage: 60
+  resources:
+    requests:
+      memory: "8Mi"
+      cpu: "150m"
+    limits:
+      memory: "16Mi"
+      cpu: "200m"

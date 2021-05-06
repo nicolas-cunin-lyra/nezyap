@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14-alpine
 
 WORKDIR /usr/src/app
 
@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 2221
 
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "run:build" ]
