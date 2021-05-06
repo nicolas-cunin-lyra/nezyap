@@ -16,7 +16,7 @@ securityContext: {}
   # runAsUser: 1000
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 3
   maxReplicas: 6
   targetCPUUtilizationPercentage: 80
@@ -78,7 +78,7 @@ payment:
 redis:
   port: 6379
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 6
     maxReplicas: 12
     targetMemoryUtilizationPercentage: 60

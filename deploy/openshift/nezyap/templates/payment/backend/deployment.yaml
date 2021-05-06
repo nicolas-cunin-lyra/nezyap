@@ -26,6 +26,10 @@ spec:
       serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: init-myservice
+        image: busybox:1.28
+        command: ['sh', '-c', "until nslookup {{ include "nezyap.fullname" . }}-redis-svc; do echo Waiting Redis to get started; sleep 2; done"]
       containers:
       - name: {{ .Chart.Name }}-payment-backend
         image: {{ .Values.image.registry }}/nezyap/payment-backend:{{ .Values.image.version }}
