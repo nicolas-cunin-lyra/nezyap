@@ -1,13 +1,23 @@
 # nezyap
 
+Simple app to demonstrate various possibilities of OpenShift cluster with an App "payment oriented".
+
 ## Demo sprint 1
-1. Aller sur la vue Developeur
-2. Déploiement d'une app depuis le terminal sur le poste de dev avec helm `helm install test nezyap`
-3. Montrer le dashboard projet avec les pods, les déploiements, les logs
-4. Montrer la vue principale "topology" en mode "archi" avec les services et la possibilité d'ajouter des liens pour montrer l'idée de l'app multi containers
-5. Montrer les quelques fonctionnalités de l'App (catalog, paiement, liste de transactions et détail)
-6. Mettre un app unhealthy et voir que le pod se relance tout seul (indisponibilité temporaire du service car un seul pod)
-7. Augmentation du nombre de pods avec utilisation d'un hpa pour scale-out/scale-in des pods `helm upgrade test nezyap --set autoscaling.enabled=true`
-8. Metrique métier répartie par pod `sum(nb_transactions) by (pod)` et consolidés par service `sum(nb_transactions) by (service)`
-9. Rolling upgrade vers nouveau code (le fond d'écran passe du bleu au vert) avec déploiement depuis le poste de dev `helm upgrade test nezyap --set image.version=v2`
-10. Rollback depuis la console d'administration (le fond d'écran repasse au bleu)
+
+### Prerequisite
+- build source code with `./scripts/build-all.sh` then build images with `./scripts/build-all-docker.sh`
+- Publish the current image versions to OpenShift registry by pushing these images, for instance: `./scripts/push-to-openshift-image-registry.sh local`
+- Create a v2, build code, build images with `./scripts/make-v2`
+- Publish these image versions to OpenShift registry, for isntance: `./scripts/push-to-openshift-image-registry.sh local v2`
+
+### Scenario
+1. In OpenShift console, go to developer view
+2. Deploy an app from the terminal with helm: `helm install test nezyap`
+3. Introduce the project dashboard with pods, deployments, logs, metrics
+4. Introduce the landing view: topology with the ability to add links in order to share a common understanding of the various services exposed and their dependencies
+5. Introduce the main app features: catalog, payment, transaction list and transaction detail: `http://catalog.backend.apps.poc.pandrieux.sattamax.com/`
+6. Make the catalog backend unhealthy: `http://catalog.backend.apps.poc.pandrieux.sattamax.com/health/break` and show the pod restarting by itself with a temporary unavailability of the service (go back to catalog view and show view is there but no catalog is shown inside the app)
+7. Increase pod number by using an Horizontal Pod Autoscaler to scale-out/scale-in the pods according to the needs: `helm upgrade test nezyap --set autoscaling.enabled=true`
+8. Show business metrics per pod `sum(nb_transactions) by (pod)` and consolidated per service `sum(nb_transactions) by (service)`
+9. Rolling upgrade to a V2 of the code (blue background will become green): `helm upgrade test nezyap --set image.version=v2`
+10. Rollback from the OpenShift console with the Helm view (backgroud goes back to blue)

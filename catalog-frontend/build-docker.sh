@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker build . -t openshift-registry.apps.poc.pandrieux.sattamax.com/nezyap/catalog-frontend:local
+docker build . -t openshift-registry.apps.poc.pandrieux.sattamax.com/nezyap/catalog-frontend:v2
