@@ -40,17 +40,17 @@ spec:
             configMapKeyRef:
               name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
               key: PORT
-        - name: PAYMENT_BACKEND_URL
+        - name: REACT_APP_PAYMENT_BACKEND_URL
           valueFrom:
             configMapKeyRef:
               name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
               key: PAYMENT_BACKEND_URL
-        - name: CATALOG_FRONTEND_BASE_URL
+        - name: REACT_APP_CATALOG_FRONTEND_BASE_URL
           valueFrom:
             configMapKeyRef:
               name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
               key: CATALOG_FRONTEND_BASE_URL
-        - name: CATALOG_BACKEND_BASE_URL
+        - name: REACT_APP_CATALOG_BACKEND_BASE_URL
           valueFrom:
             configMapKeyRef:
               name: {{ include "nezyap.fullname" . }}-payment-frontend-cm

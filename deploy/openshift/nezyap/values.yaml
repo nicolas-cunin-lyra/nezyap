@@ -48,24 +48,24 @@ catalog:
   backend:
     port: 3331
     ingress:
-      prefix: /
+      prefix: 
       host: catalog.backend.apps.poc.pandrieux.sattamax.com
   frontend:
     port: 2221
     ingress:
-      prefix: /
+      prefix: 
       host: catalog.frontend.apps.poc.pandrieux.sattamax.com
 
 payment:
   backend:
     port: 3332
     ingress:
-      prefix: /
+      prefix: 
       host: payment.backend.apps.poc.pandrieux.sattamax.com
   frontend:
     port: 2222
     ingress:
-      prefix: /
+      prefix: 
       host: payment.frontend.apps.poc.pandrieux.sattamax.com
 
 redis:
