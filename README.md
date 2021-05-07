@@ -9,6 +9,7 @@ Simple app to demonstrate various possibilities of OpenShift cluster with an App
 - Publish the current image versions to OpenShift registry by pushing these images, for instance: `./scripts/push-to-openshift-image-registry.sh local`
 - Create a v2, build code, build images with `./scripts/make-v2`
 - Publish these image versions to OpenShift registry, for isntance: `./scripts/push-to-openshift-image-registry.sh local v2`
+- All the helm commands indicated in the scenario must be run from `deploy/openshift` folder
 
 ### Scenario
 1. In OpenShift console, go to developer view
