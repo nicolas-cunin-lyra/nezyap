@@ -5,15 +5,17 @@ Simple app to demonstrate various possibilities of OpenShift cluster with an App
 ## Demo sprint 1
 
 ### Prerequisite
-- build source code with `./scripts/build-all.sh` then build images with `./scripts/build-all-docker.sh`
-- Publish the current image versions to OpenShift registry by pushing these images, for instance: `./scripts/push-to-openshift-image-registry.sh local`
-- Create a v2, build code, build images with `./scripts/make-v2.sh`
-- Publish these image versions to OpenShift registry, for isntance: `./scripts/push-to-openshift-image-registry.sh local v2`
-- Restore files with `./scripts/restore-v1.sh`
-
 For helm to work
 - helm commands indicated in the scenario must be run from `deploy/openshift` folder
 - Before running helm commands, you must go to OpenShift console and copy the credentials (`https://oauth-openshift.apps.poc.pandrieux.sattamax.com/oauth/token/display`)
+  
+Publish images used by the application:
+- authenticate with docker on openshift-image-registry (not using CI for this POC) `docker login -u kubeadmin -p `oc whoami -t` https://openshift-registry.apps.poc.pandrieux.sattamax.com`
+- build source code with `./scripts/build-all.sh` then build images with `./scripts/build-all-docker.sh`
+- Publish the current image versions to OpenShift registry by pushing these images, for instance: `./scripts/push-to-openshift-image-registry.sh local`
+- Create a v2, build code, build images with `./scripts/make-v2.sh`
+- Publish these image versions to OpenShift registry: `./scripts/push-to-openshift-image-registry.sh v2`
+- Restore files with `./scripts/restore-v1.sh`
 
 ### Scenario
 1. In OpenShift console, go to developer view
