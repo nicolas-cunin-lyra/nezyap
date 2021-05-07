@@ -6,16 +6,16 @@ for project in ${projects_to_build[@]}; do
   cd $project
   if [[ "$project" == *-frontend ]]; then
     echo "------------------------------"
-    echo "--> Changing background from blue to green in $project"
+    echo "--> Restoring background to blue in $project"
     echo "------------------------------"
-    sed -i 's/aliceblue/rgb(43, 134, 43)/g' src/index.css
+    sed -i 's/rgb\(43, 134, 43\)/aliceblue/g' src/index.css
     yarn build
   fi
 
   echo "------------------------------"
-  echo "--> Changing docker TAG for v2"
+  echo "--> Restoring docker TAG for local"
   echo "------------------------------"
-  sed -i 's/local/v2/g' build-docker.sh
+  sed -i 's/v2/local/g' build-docker.sh
 
   echo "------------------------------"
   echo "--> Build docker image locally"
@@ -27,5 +27,5 @@ done
 
 echo "------"
 echo "--> Now, you can use the script:"
-echo "             ./scripts/push-to-openshift-image-registry.sh v2"
+echo "             ./scripts/push-to-openshift-image-registry.sh local"
 echo "------"
