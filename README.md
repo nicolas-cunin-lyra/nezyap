@@ -28,3 +28,4 @@ Publish images used by the application:
 8. Show business metrics per pod `sum(nb_transactions) by (pod)` and consolidated per service `sum(nb_transactions) by (service)`
 9. Rolling upgrade to a V2 of the code (blue background will become green): `helm upgrade test nezyap --set image.version=v2 --set autoscaling.enabled=true`
 10. Rollback from the OpenShift console with the Helm view (backgroud goes back to blue)
+11. Remove the app from the cluster `helm uninstall test`
