@@ -9,7 +9,8 @@ RUN yarn config set strict-ssl false
 RUN yarn install
 
 COPY . .
+RUN chmod +x scripts/*
 
 EXPOSE 2221
 
-CMD [ "yarn", "run:build" ]
+CMD ["./scripts/build_and_run.sh"]

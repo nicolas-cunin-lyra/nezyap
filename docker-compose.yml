@@ -35,8 +35,8 @@ services:
     container_name: catalog-frontend
     environment:
       - PORT=2221
-      - CATALOG_BACKEND_URL=http://localhost:3331
-      - PAYMENT_FRONTEND_BASE_URL=http://localhost:3331
+      - REACT_APP_CATALOG_BACKEND_URL=http://localhost:3331
+      - REACT_APP_PAYMENT_FRONTEND_BASE_URL=http://localhost:2222
 
   payment_frontend:
     build:
@@ -48,8 +48,9 @@ services:
     container_name: payment-frontend
     environment:
       - PORT=2222
-      - PAYMENT_BACKEND_URL=http://localhost:3332
-      - CATALOG_FRONTEND_BASE_URL=http://localhost:2221
+      - REACT_APP_PAYMENT_BACKEND_URL=http://localhost:3332
+      - REACT_APP_CATALOG_FRONTEND_BASE_URL=http://localhost:2221
+      - REACT_APP_CATALOG_BACKEND_BASE_URL=http://localhost:3331
 
   redis:
     image: redis:alpine
