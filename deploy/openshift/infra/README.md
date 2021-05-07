@@ -1,0 +1,1 @@
+https://docs.openshift.com/container-platform/4.7/logging/cluster-logging-deploying.html
