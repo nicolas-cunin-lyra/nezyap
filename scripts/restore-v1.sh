@@ -8,7 +8,7 @@ for project in ${projects_to_build[@]}; do
     echo "------------------------------"
     echo "--> Restoring background to blue in $project"
     echo "------------------------------"
-    sed -i 's/rgb\(43, 134, 43\)/aliceblue/g' src/index.css
+    sed -i 's/rgb[(]43, 134, 43[)]/aliceblue/g' src/index.css
     yarn build
   fi
 

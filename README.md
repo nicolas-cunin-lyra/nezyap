@@ -8,7 +8,11 @@ Simple app to demonstrate various possibilities of OpenShift cluster with an App
 For helm to work
 - helm commands indicated in the scenario must be run from `deploy/openshift` folder
 - Before running helm commands, you must go to OpenShift console and copy the credentials (`https://oauth-openshift.apps.poc.pandrieux.sattamax.com/oauth/token/display`)
-  
+
+To be able to publish images:
+- `cd deploy/openshift/infra`
+- `kubectl apply -f image-registry/route-registry.yaml`
+
 Publish images used by the application:
 - authenticate with docker on openshift-image-registry (not using CI for this POC) `docker login -u kubeadmin -p `oc whoami -t` https://openshift-registry.apps.poc.pandrieux.sattamax.com`
 - build source code with `./scripts/build-all.sh` then build images with `./scripts/build-all-docker.sh`
@@ -16,6 +20,11 @@ Publish images used by the application:
 - Create a v2, build code, build images with `./scripts/make-v2.sh`
 - Publish these image versions to OpenShift registry: `./scripts/push-to-openshift-image-registry.sh v2`
 - Restore files with `./scripts/restore-v1.sh`
+
+To be able to see project metrics:
+- `cd deploy/openshift/infra`
+- `kubectl apply -f monitoring/cluster-monitoring-config.yaml`
+- `kubectl apply -f monitoring/openshift-user-workload-monitoring.yaml`
 
 ### Scenario
 1. In OpenShift console, go to developer view
