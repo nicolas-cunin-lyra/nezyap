@@ -1,16 +1,18 @@
 FROM node:14-alpine
 
-WORKDIR /usr/src/app
+LABEL io.openshift.s2i.scripts-url=image:///usr/local/s2i
 
-COPY package.json ./
+WORKDIR /opt/app-root/
+
+COPY ./.s2i/bin/ /usr/local/s2i
+COPY src ./
+COPY data ./
+COPY *.json ./
 COPY yarn.lock ./
 
-RUN yarn config set strict-ssl false
-RUN yarn install
-RUN yarn build
+RUN chown -R 1001:1001 /opt/app-root
 
-COPY . .
+USER 1001
 
 EXPOSE 3331
-
-CMD [ "yarn", "start:prod" ]
+CMD ["usage"]

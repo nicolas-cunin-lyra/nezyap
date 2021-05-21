@@ -1,0 +1,10 @@
+#!/bin/bash -e
+cat <<EOF
+This is the catalog-backend S2I image:
+To use it, install S2I: https://github.com/openshift/source-to-image
+Sample invocation:
+s2i build test/test-app catalog-backend catalog-backend-app
+You can then run the resulting image via:
+docker run -d -p 3331:3331 nezyap/catalog-backend
+and see the test via http://localhost:3331
+EOF
