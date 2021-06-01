@@ -1,10 +1,10 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  name: {{ include "nezyap.fullname" . }}-catalog-backend
+  name: {{ include "nezyap.fullname" . }}-payment-backend
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
-    app.kubernetes.io/element: catalog-backend
+    app.kubernetes.io/element: payment-backend
 spec:
   triggers:
   - type: GitHub
@@ -15,7 +15,7 @@ spec:
       type: "Git"
       git:
         uri: https://github.com/nicolas-cunin-lyra/nezyap#feature/s2i
-      contextDir: catalog-backend
+      contextDir: payment-backend
   strategy:
     type: Source
     sourceStrategy:
@@ -27,4 +27,4 @@ spec:
   output:
     to:
       kind: ImageStreamTag
-      name: {{ .Values.image.registry }}/nezyap/catalog-backend:{{ .Values.image.version }}
+      name: {{ .Values.image.registry }}/nezyap/payment-backend:{{ .Values.image.version }}

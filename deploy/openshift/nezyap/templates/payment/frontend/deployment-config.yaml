@@ -1,0 +1,79 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: {{ include "nezyap.fullname" . }}-payment-frontend
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: payment-frontend
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    name: {{ include "nezyap.fullname" . }}-payment-frontend
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        name: {{ include "nezyap.fullname" . }}-payment-frontend
+    spec:
+      serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ include "nezyap.fullname" . }}-payment-frontend
+        image: {{ .Values.image.registry }}/nezyap/payment-frontend:{{ .Values.image.version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.payment.frontend.port }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
+              key: PORT
+        - name: REACT_APP_PAYMENT_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
+              key: PAYMENT_BACKEND_URL
+        - name: REACT_APP_CATALOG_FRONTEND_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
+              key: CATALOG_FRONTEND_BASE_URL
+        - name: REACT_APP_CATALOG_BACKEND_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-frontend-cm
+              key: CATALOG_BACKEND_BASE_URL
+        livenessProbe:
+          httpGet:
+            path: /transactions
+            port: {{ .Values.payment.frontend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /transactions
+            port: {{ .Values.payment.frontend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+          failureThreshold: 30
+  triggers:
+  - type: ConfigChange 
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - {{ include "nezyap.fullname" . }}-payment-frontend
+      from:
+        kind: ImageStreamTag
+        name: {{ .Values.image.registry }}/nezyap/payment-frontend:{{ .Values.image.version }}
+    type: ImageChange
+  strategy:
+    type: Rolling

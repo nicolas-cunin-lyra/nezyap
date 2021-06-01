@@ -1,16 +1,16 @@
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
-  name: {{ include "nezyap.fullname" . }}-catalog-backend
+  name: {{ include "nezyap.fullname" . }}-catalog-frontend
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
-    app.kubernetes.io/element: catalog-backend
+    app.kubernetes.io/element: catalog-frontend
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
-    name: {{ include "nezyap.fullname" . }}-catalog-backend
+    name: {{ include "nezyap.fullname" . }}-catalog-frontend
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,29 +18,29 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        name: {{ include "nezyap.fullname" . }}-catalog-backend
+        name: {{ include "nezyap.fullname" . }}-catalog-frontend
     spec:
       serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-      - name: {{ include "nezyap.fullname" . }}-catalog-backend
-        image: {{ .Values.image.registry }}/nezyap/catalog-backend:{{ .Values.image.version }}
+      - name: {{ include "nezyap.fullname" . }}-catalog-frontend
+        image: {{ .Values.image.registry }}/nezyap/catalog-frontend:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: {{ .Values.catalog.backend.port }}
+        - containerPort: {{ .Values.catalog.frontend.port }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.catalog.backend.port }}
+            port: {{ .Values.catalog.frontend.port }}
           initialDelaySeconds: 2
           periodSeconds: 5
         readinessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.catalog.backend.port }}
+            port: {{ .Values.catalog.frontend.port }}
           initialDelaySeconds: 2
           periodSeconds: 5
   triggers:

@@ -1,0 +1,79 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: {{ include "nezyap.fullname" . }}-payment-backend
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: payment-backend
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    name: {{ include "nezyap.fullname" . }}-payment-backend
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        name: {{ include "nezyap.fullname" . }}-payment-backend
+    spec:
+      serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: init-myservice
+        image: busybox:1.28
+        command: ['sh', '-c', "until nslookup {{ include "nezyap.fullname" . }}-redis-svc; do echo Waiting Redis to get started; sleep 2; done"]
+      containers:
+      - name: {{ .Chart.Name }}-payment-backend
+        image: {{ .Values.image.registry }}/nezyap/payment-backend:{{ .Values.image.version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.payment.backend.port }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        env:
+        - name: CATALOG_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-backend-cm
+              key: CATALOG_BACKEND_URL
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-backend-cm
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-payment-backend-cm
+              key: REDIS_PORT
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.payment.backend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.payment.backend.port }}
+          initialDelaySeconds: 2
+          periodSeconds: 5
+  triggers:
+  - type: ConfigChange 
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - {{ include "nezyap.fullname" . }}-payment-backend
+      from:
+        kind: ImageStreamTag
+        name: {{ .Values.image.registry }}/nezyap/payment-backend:{{ .Values.image.version }}
+    type: ImageChange
+  strategy:
+    type: Rolling
