@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: {{ include "nezyap.fullname" . }}-catalog-backend
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: catalog-backend
+spec:
+  triggers:
+  - type: GitHub
+    github:
+      secretReference:
+        name: {{ include "nezyap.fullname" . }}-nicolas-cunin-lyra-github-secret
+  source:
+      type: "Git"
+      git:
+        uri: https://github.com/nicolas-cunin-lyra/nezyap#feature/s2i
+      contextDir: catalog-backend
+  strategy:
+    type: Source
+    sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          namespace: openshift
+          name: nodejs
+        incremental: true
+  output:
+    to:
+      kind: ImageStreamTag
+      name: {{ .Values.image.registry }}/nezyap/catalog-backend:{{ .Values.image.version }}
