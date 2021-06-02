@@ -1,0 +1,10 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: {{ include "nezyap.fullname" . }}-payment-frontend
+  namespace: {{ include "nezyap.name" . }}
+  namespace: {{ include "nezyap.name" . }}
+  labels:
+    {{- include "nezyap.labels" . | nindent 4 }}
+    app.kubernetes.io/element: payment-frontend
+  

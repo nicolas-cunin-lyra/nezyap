@@ -39,7 +39,7 @@ image:
   # for lyra custom images
   # these default values are for microk8s registry
   registry: image-registry.openshift-image-registry.svc:5000
-  version: local
+  version: latest
 
 ingress:
   usePrefix: false

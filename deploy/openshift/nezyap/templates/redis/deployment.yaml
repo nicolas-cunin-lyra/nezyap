@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "nezyap.fullname" . }}-redis-deploy
+  namespace: {{ include "nezyap.name" . }}
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: redis-deploy

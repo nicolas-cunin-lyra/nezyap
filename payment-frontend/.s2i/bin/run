@@ -17,7 +17,7 @@ fi
 # hot deploy and debugging are enabled.
 run_node() {
   echo "Launching via yarn..."
-  exec yarn run:build
+  exec npm run run:build
 } 
 
 #Set the debug port to 5858 by default.

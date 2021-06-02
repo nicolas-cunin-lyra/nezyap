@@ -2,6 +2,7 @@ apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
   name: {{ include "nezyap.fullname" . }}-catalog-backend
+  namespace: {{ include "nezyap.name" . }}
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: catalog-backend
@@ -14,7 +15,8 @@ spec:
   source:
       type: "Git"
       git:
-        uri: https://github.com/nicolas-cunin-lyra/nezyap#feature/s2i
+        uri: https://github.com/nicolas-cunin-lyra/nezyap.git
+        ref: feature/s2i
       contextDir: catalog-backend
   strategy:
     type: Source
@@ -22,9 +24,10 @@ spec:
         from:
           kind: ImageStreamTag
           namespace: openshift
-          name: nodejs:latest
+          name: nodejs:14-ubi8
         incremental: true
   output:
     to:
       kind: ImageStreamTag
-      name: {{ .Values.image.registry }}/nezyap/catalog-backend:{{ .Values.image.version }}
+      name: {{ include "nezyap.fullname" . }}-catalog-backend:{{ .Values.image.version }}
+      namespace: {{ include "nezyap.name" . }}

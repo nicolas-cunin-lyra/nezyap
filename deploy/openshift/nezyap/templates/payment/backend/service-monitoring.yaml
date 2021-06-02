@@ -3,6 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "nezyap.fullname" . }}-prometheus
+  namespace: {{ include "nezyap.name" . }}
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: prometheus

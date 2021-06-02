@@ -2,6 +2,7 @@ apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   name: {{ include "nezyap.fullname" . }}-payment-frontend
+  namespace: {{ include "nezyap.name" . }}
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: payment-frontend
@@ -73,7 +74,8 @@ spec:
       - {{ include "nezyap.fullname" . }}-payment-frontend
       from:
         kind: ImageStreamTag
-        name: {{ .Values.image.registry }}/nezyap/payment-frontend:{{ .Values.image.version }}
+        name: payment-frontend:{{ .Values.image.version }}
+        namespace: {{ include "nezyap.name" . }}
     type: ImageChange
   strategy:
     type: Rolling

@@ -2,6 +2,7 @@ apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   name: {{ include "nezyap.fullname" . }}-catalog-frontend
+  namespace: {{ include "nezyap.name" . }}
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: catalog-frontend
@@ -31,15 +32,31 @@ spec:
         - containerPort: {{ .Values.catalog.frontend.port }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-catalog-frontend-cm
+              key: PORT
+        - name: REACT_APP_CATALOG_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-catalog-frontend-cm
+              key: CATALOG_BACKEND_URL
+        - name: REACT_APP_PAYMENT_FRONTEND_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "nezyap.fullname" . }}-catalog-frontend-cm
+              key: PAYMENT_FRONTEND_BASE_URL
         livenessProbe:
           httpGet:
-            path: /health
+            path: /
             port: {{ .Values.catalog.frontend.port }}
           initialDelaySeconds: 2
           periodSeconds: 5
         readinessProbe:
           httpGet:
-            path: /health
+            path: /
             port: {{ .Values.catalog.frontend.port }}
           initialDelaySeconds: 2
           periodSeconds: 5
@@ -48,10 +65,11 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - {{ include "nezyap.fullname" . }}-catalog-backend
+      - {{ include "nezyap.fullname" . }}-catalog-frontend
       from:
         kind: ImageStreamTag
-        name: {{ .Values.image.registry }}/nezyap/catalog-backend:{{ .Values.image.version }}
+        name: catalog-frontend:{{ .Values.image.version }}
+        namespace: {{ include "nezyap.name" . }}
     type: ImageChange
   strategy:
     type: Rolling

@@ -2,6 +2,7 @@ apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   name: {{ include "nezyap.fullname" . }}-payment-backend
+  namespace: {{ include "nezyap.name" . }}
   labels:
     {{- include "nezyap.labels" . | nindent 4 }}
     app.kubernetes.io/element: payment-backend
@@ -28,7 +29,7 @@ spec:
         image: busybox:1.28
         command: ['sh', '-c', "until nslookup {{ include "nezyap.fullname" . }}-redis-svc; do echo Waiting Redis to get started; sleep 2; done"]
       containers:
-      - name: {{ .Chart.Name }}-payment-backend
+      - name: {{ include "nezyap.fullname" . }}-payment-backend
         image: {{ .Values.image.registry }}/nezyap/payment-backend:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
@@ -73,7 +74,8 @@ spec:
       - {{ include "nezyap.fullname" . }}-payment-backend
       from:
         kind: ImageStreamTag
-        name: {{ .Values.image.registry }}/nezyap/payment-backend:{{ .Values.image.version }}
+        name: payment-backend:{{ .Values.image.version }}
+        namespace: {{ include "nezyap.name" . }}
     type: ImageChange
   strategy:
     type: Rolling

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "nezyap.fullname" . }}-catalog-frontend-cm
+  namespace: {{ include "nezyap.name" . }}
 data:
   PORT: "{{ .Values.catalog.frontend.port }}"
   CATALOG_BACKEND_URL: "http://{{ .Values.catalog.backend.ingress.host }}{{ .Values.catalog.backend.ingress.prefix }}"
