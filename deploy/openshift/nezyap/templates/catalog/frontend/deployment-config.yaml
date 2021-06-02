@@ -8,7 +8,9 @@ metadata:
     app.kubernetes.io/element: catalog-frontend
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.autoscaling.minReplicas }}
+  {{- else }}
+  replicas: 1
   {{- end }}
   selector:
     name: {{ include "nezyap.fullname" . }}-catalog-frontend
@@ -68,7 +70,7 @@ spec:
       - {{ include "nezyap.fullname" . }}-catalog-frontend
       from:
         kind: ImageStreamTag
-        name: catalog-frontend:{{ .Values.image.version }}
+        name: {{ include "nezyap.fullname" . }}-catalog-frontend:{{ .Values.image.version }}
         namespace: {{ include "nezyap.name" . }}
     type: ImageChange
   strategy:

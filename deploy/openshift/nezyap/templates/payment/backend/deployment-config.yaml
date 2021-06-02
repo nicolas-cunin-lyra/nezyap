@@ -8,7 +8,9 @@ metadata:
     app.kubernetes.io/element: payment-backend
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.autoscaling.minReplicas }}
+  {{- else }}
+  replicas: 1
   {{- end }}
   selector:
     name: {{ include "nezyap.fullname" . }}-payment-backend
@@ -74,7 +76,7 @@ spec:
       - {{ include "nezyap.fullname" . }}-payment-backend
       from:
         kind: ImageStreamTag
-        name: payment-backend:{{ .Values.image.version }}
+        name: {{ include "nezyap.fullname" . }}-payment-backend:{{ .Values.image.version }}
         namespace: {{ include "nezyap.name" . }}
     type: ImageChange
   strategy:

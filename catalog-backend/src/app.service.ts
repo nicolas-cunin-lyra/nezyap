@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Catalog } from './model/Catalog'
 import { Product } from './model/Product'
-import path from 'path'
+import * as path from 'path'
 
 @Injectable()
 export class AppService {
