@@ -12,20 +12,5 @@ for project in ${projects_to_build[@]}; do
     yarn build
   fi
 
-  echo "------------------------------"
-  echo "--> Changing docker TAG for v2"
-  echo "------------------------------"
-  sed -i 's/local/v2/g' build-docker.sh
-
-  echo "------------------------------"
-  echo "--> Build docker image locally"
-  echo "------------------------------"
-  ./build-docker.sh
-
   cd ..
 done
-
-echo "------"
-echo "--> Now, you can use the script:"
-echo "             ./scripts/push-to-openshift-image-registry.sh v2"
-echo "------"

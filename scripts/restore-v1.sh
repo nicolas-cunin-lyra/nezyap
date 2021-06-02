@@ -12,20 +12,5 @@ for project in ${projects_to_build[@]}; do
     yarn build
   fi
 
-  echo "------------------------------"
-  echo "--> Restoring docker TAG for local"
-  echo "------------------------------"
-  sed -i 's/v2/local/g' build-docker.sh
-
-  echo "------------------------------"
-  echo "--> Build docker image locally"
-  echo "------------------------------"
-  ./build-docker.sh
-
   cd ..
 done
-
-echo "------"
-echo "--> Now, you can use the script:"
-echo "             ./scripts/push-to-openshift-image-registry.sh local"
-echo "------"
