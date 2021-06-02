@@ -1,4 +1,4 @@
-{
+export default {
     "products": [
         {
             "id": "1b37ae80-e151-4b77-8742-a3909378dea5",

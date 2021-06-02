@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Catalog } from './model/Catalog'
 import { Product } from './model/Product'
-const catalogData = require('./data/catalog.json')
+import catalogData from './data/catalog'
 
 @Injectable()
 export class AppService {
