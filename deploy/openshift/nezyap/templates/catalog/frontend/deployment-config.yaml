@@ -22,6 +22,8 @@ spec:
       {{- end }}
       labels:
         name: {{ include "nezyap.fullname" . }}-catalog-frontend
+        {{- include "nezyap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/element: catalog-frontend
     spec:
       serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
       securityContext:

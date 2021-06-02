@@ -22,6 +22,8 @@ spec:
       {{- end }}
       labels:
         name: {{ include "nezyap.fullname" . }}-payment-backend
+        {{- include "nezyap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/element: payment-backend
     spec:
       serviceAccountName: {{ include "nezyap.serviceAccountName" . }}
       securityContext:
