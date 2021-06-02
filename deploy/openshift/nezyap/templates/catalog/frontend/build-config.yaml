@@ -15,8 +15,8 @@ spec:
   source:
       type: "Git"
       git:
-        uri: https://github.com/nicolas-cunin-lyra/nezyap.git
-        ref: feature/s2i
+        uri: {{ .Values.source.repository }}
+        ref: {{ .Values.source.branch }}
       contextDir: catalog-frontend
   strategy:
     type: Source

@@ -41,6 +41,10 @@ image:
   registry: image-registry.openshift-image-registry.svc:5000
   version: latest
 
+source:
+  repository: https://github.com/nicolas-cunin-lyra/nezyap.git
+  branch: feature/s2i
+
 ingress:
   usePrefix: false
 
