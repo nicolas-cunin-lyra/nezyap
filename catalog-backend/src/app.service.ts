@@ -1,13 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Catalog } from './model/Catalog'
 import { Product } from './model/Product'
-import * as path from 'path'
+const catalogData = require('./data/catalog.json')
 
 @Injectable()
 export class AppService {
 
   private readonly logger = new Logger(AppService.name);
-  private readonly dataPath = path.join('.', 'data', 'catalog.json')
 
   private catalog: Catalog
 
@@ -44,7 +43,7 @@ export class AppService {
   }
 
   private loadData() {
-    this.catalog = require(this.dataPath)
+    this.catalog = catalogData
   }
 
   private clearData() {
