@@ -7,7 +7,7 @@ Simple app to demonstrate various possibilities of OpenShift cluster with an App
 ### Prerequisite
 For helm to work
 - helm commands indicated in the scenario must be run from `deploy/openshift` folder
-- Before running helm commands, you must go to OpenShift console and copy the credentials (`https://oauth-openshift.apps.poc.pandrieux.sattamax.com/oauth/token/display`)
+- Before running helm commands, you must go to OpenShift console and copy the credentials (`https://oauth-openshift.apps.test-openshift.benoit.sattamax.com/oauth/token/display`)
 
 To be able to see project metrics:
 - `cd deploy/openshift/infra`

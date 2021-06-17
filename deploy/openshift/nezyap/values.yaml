@@ -53,24 +53,24 @@ catalog:
     port: 3331
     ingress:
       prefix: 
-      host: catalog.backend.apps.poc.pandrieux.sattamax.com
+      host: catalog.backend.apps.test-openshift.benoit.sattamax.com
   frontend:
     port: 2221
     ingress:
       prefix: 
-      host: catalog.frontend.apps.poc.pandrieux.sattamax.com
+      host: catalog.frontend.apps.test-openshift.benoit.sattamax.com
 
 payment:
   backend:
     port: 3332
     ingress:
       prefix: 
-      host: payment.backend.apps.poc.pandrieux.sattamax.com
+      host: payment.backend.apps.test-openshift.benoit.sattamax.com
   frontend:
     port: 2222
     ingress:
       prefix: 
-      host: payment.frontend.apps.poc.pandrieux.sattamax.com
+      host: payment.frontend.apps.test-openshift.benoit.sattamax.com
 
 redis:
   port: 6379

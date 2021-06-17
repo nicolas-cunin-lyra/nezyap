@@ -6,7 +6,7 @@ metadata:
   labels:
     docker-registry: default
 spec:
-  host: openshift-registry.apps.poc.pandrieux.sattamax.com
+  host: openshift-registry.apps.test-openshift.benoit.sattamax.com
   to:
     kind: Service
     name: image-registry
@@ -19,11 +19,11 @@ spec:
   wildcardPolicy: None
 status:
   ingress:
-    - host: openshift-registry.apps.poc.pandrieux.sattamax.com
+    - host: openshift-registry.apps.test-openshift.benoit.sattamax.com
       routerName: default
       conditions:
         - type: Admitted
           status: 'True'
           lastTransitionTime: '2021-05-05T10:34:55Z'
       wildcardPolicy: None
-      routerCanonicalHostname: apps.poc.pandrieux.sattamax.com
+      routerCanonicalHostname: apps.test-openshift.benoit.sattamax.com
